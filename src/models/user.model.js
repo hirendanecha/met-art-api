@@ -49,7 +49,10 @@ User.login = function (email, Id, result) {
             p.matchEducation,
             p.matchIsVaccinated,
             p.userStatus,
-            p.matchHaveChild
+            p.matchHaveChild,
+            p.messageNotificationSound,
+            p.callNotificationSound,
+            p.tagNotificationSound
      FROM users as u left join profile as p on p.userId = u.id WHERE u.email = ? AND u.id = ?`,
     [email, Id],
     async function (err, res) {
@@ -102,7 +105,9 @@ User.create = function (userData, result) {
 
 User.findAndSearchAll = async (limit, offset, search, startDate, endDate) => {
   let whereCondition = `u.isAdmin = 'N' ${
-    search ? `AND p.userName LIKE '%${search}%' OR u.email LIKE '%${search}%'` : ""
+    search
+      ? `AND p.userName LIKE '%${search}%' OR u.email LIKE '%${search}%'`
+      : ""
   }`;
 
   if (startDate && endDate) {
